@@ -27,4 +27,19 @@ describe BEncoder do
     end
   end
 
+
+  context 'numbers' do
+    it 'encodes +ve integers correctly' do
+      expect(be.encode(123)).to eq('i123e')
+    end
+
+    it 'encodes -ve integers correctly' do
+      expect(be.encode(-123)).to eq('i-123e')
+    end
+
+    it 'encodes zero correctly' do
+      expect(be.encode(00)).to eq('i0e')
+    end
+  end
+
 end

@@ -10,6 +10,8 @@ module BEncoder
         encode_string obj
       when Symbol
         encode_symbol obj
+      when Integer
+        encode_integer obj
       end
     end
 
@@ -21,6 +23,10 @@ module BEncoder
 
       def encode_symbol symb
         encode_string symb.to_s
+      end
+
+      def encode_integer int
+        "i#{ int }e"
       end
 
   end
