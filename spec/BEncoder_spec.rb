@@ -84,6 +84,22 @@ describe BEncoder do
       end
     end
 
+
+    context 'numbers' do
+      it 'decodes +ve integers correctly' do
+        expect(be.decode('i123e')).to eq(123)
+      end
+
+      it 'decodes -ve integers correctly' do
+        expect(be.decode('i-123e')).to eq(-123)
+      end
+
+      it 'decodes zero correctly' do
+        expect(be.decode('i0e')).to eq(0)
+      end      
+    end
+
+
   end
 
 end

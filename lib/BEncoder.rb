@@ -20,7 +20,12 @@ module BEncoder
     end
 
     def decode str
-      decode_string str      
+      case str.chars.first
+      when 'i'
+        decode_integer str
+      else
+        decode_string str
+      end  
     end
 
 
@@ -63,6 +68,14 @@ module BEncoder
       end
 
 
+      def decode_integer str
+        
+        unless str.start_with?('i') && str.end_with?('e')
+          raise StandardError, "Ill formatted integer"
+        end
+
+        str.slice(1..-2).to_i
+      end
   end
   
 end
