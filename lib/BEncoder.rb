@@ -12,6 +12,8 @@ module BEncoder
         encode_symbol obj
       when Integer
         encode_integer obj
+      when Array
+        encode_array obj
       end
     end
 
@@ -27,6 +29,10 @@ module BEncoder
 
       def encode_integer int
         "i#{ int }e"
+      end
+
+      def encode_array arr
+        arr.inject('l') { |result, el| result += encode(el) } + 'e'
       end
 
   end
