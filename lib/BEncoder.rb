@@ -26,6 +26,8 @@ module BEncoder
         decode_integer str
       when 'l'
         decode_array str
+      when 'd'
+        decode_hash str
       else
         decode_string str
       end  
@@ -97,6 +99,21 @@ module BEncoder
       end
 
 
+      def decode_hash str
+
+        if str.is_a? StringIO
+          str.getc if peek(str) == 'd'
+          key_val_arr = decode_array(str)
+        elsif str.start_with?('d') && str.end_with?('e')
+          key_val_arr = decode_array("l#{ str.slice(1..-2) }e")
+        else
+          raise StandardErrorError, "Ill formatted hash"
+        end
+
+        make_hash(key_val_arr)
+      end
+
+
       def decode_iter io, container
         io.getc if peek(io) == 'l'
 
@@ -105,6 +122,8 @@ module BEncoder
           when 'i'
             container << decode_integer(io.gets sep='e')
           when 'l'
+            container << decode_array(io)
+          when 'd'
             container << decode_array(io)
           when ->(e) { e =~ /\d/ }
             length = io.gets(sep=':').to_i
@@ -116,6 +135,15 @@ module BEncoder
         io.getc
 
         container
+      end
+
+
+      def make_hash arr
+        hash = {}
+        arr.each_slice(2) do |k,v|
+          hash[k] = v
+        end
+        hash
       end
 
 

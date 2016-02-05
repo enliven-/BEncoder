@@ -110,6 +110,18 @@ describe BEncoder do
       end
     end
 
+
+    context 'hashes' do
+      it 'decodes simple hashes correctly' do
+        expect(be.decode('d4:key14:val14:key24:val2e')).to eq({ 'key1'=>'val1', 'key2'=>'val2' })
+      end
+
+      it 'decodes complex hashes correctly' do
+        expect(be.decode('d4:key14:val14:key2l5:hello5:worldee')).to eq({'key1'=>'val1', 'key2'=>['hello', 'world']})
+      end
+    end
+
+
   end
 
 end
