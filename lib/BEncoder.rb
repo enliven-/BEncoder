@@ -14,6 +14,8 @@ module BEncoder
         encode_integer obj
       when Array
         encode_array obj
+      when Hash
+        encode_hash obj
       end
     end
 
@@ -33,6 +35,10 @@ module BEncoder
 
       def encode_array arr
         arr.inject('l') { |result, el| result += encode(el) } + 'e'
+      end
+
+      def encode_hash hash
+        hash.inject('d') { |result, (k,v)| result += "#{ encode(k) }#{ encode(v) }" } + 'e'
       end
 
   end

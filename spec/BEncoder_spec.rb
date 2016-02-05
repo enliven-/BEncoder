@@ -57,4 +57,15 @@ describe BEncoder do
     end
   end
 
+
+  context 'hashes' do
+    it 'encodes hashes correctly' do
+      expect(be.encode({ key1: 'val1', key2: 'val2' })).to eq('d4:key14:val14:key24:val2e')
+    end
+
+    it 'encodes complex hashes correctly' do
+      expect(be.encode({ key1: 'val1', key2: ['hello', 'world'] })).to eq('d4:key14:val14:key2l5:hello5:worldee')
+    end
+  end
+
 end
