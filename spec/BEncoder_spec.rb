@@ -100,6 +100,16 @@ describe BEncoder do
     end
 
 
+    context 'arrays' do
+      it 'decodes simple arrays correctly' do
+        expect(be.decode('l3:hey5:therei100ee')).to eq(['hey', 'there', 100])
+      end
+
+      it 'decodes nested arrays correctly' do
+        expect(be.decode('l4:spaml4:eggsee')).to eq(['spam', ['eggs']])
+      end
+    end
+
   end
 
 end
