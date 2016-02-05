@@ -19,8 +19,16 @@ module BEncoder
       end
     end
 
+    def decode str
+      decode_string str      
+    end
+
 
     private
+
+
+      # Encode helpers
+
       def encode_string str
         "#{ str.length }:#{ str }"
       end
@@ -40,6 +48,20 @@ module BEncoder
       def encode_hash hash
         hash.inject('d') { |result, (k,v)| result += "#{ encode(k) }#{ encode(v) }" } + 'e'
       end
+
+
+      # Decode helpers
+
+      def decode_string str
+        length, data = str.split(':', -1)
+
+        unless length.to_i == data.length
+          raise StandardError, "String length mismatch. Expected #{length.to_i}; got #{data.length}"
+        end
+
+        data
+      end
+
 
   end
   
