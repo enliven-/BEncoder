@@ -1,4 +1,4 @@
-require "BEncoder/version"
+require 'BEncoder/version'
 
 module BEncoder
   # Your code goes here...
