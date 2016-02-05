@@ -1,6 +1,12 @@
 require 'BEncoder/version'
 require 'stringio'
 
+
+class InvalidEncodingError < StandardError; end
+class UnencodableTypeError < StandardError; end
+
+
+
 module BEncoder
 
   class BEncoder
@@ -17,6 +23,8 @@ module BEncoder
         encode_array obj
       when Hash
         encode_hash obj
+      else
+        raise UnencodableTypeError, "Cannot encode instance of type #{obj.class}"
       end
     end
 
@@ -66,7 +74,7 @@ module BEncoder
         length, data = str.split(':', -1)
 
         unless length.to_i == data.length
-          raise StandardError, "String length mismatch. Expected #{length.to_i}; got #{data.length}"
+          raise InvalidEncodingError, "String length mismatch. Expected #{length.to_i}; got #{data.length}"
         end
 
         data
@@ -76,7 +84,7 @@ module BEncoder
       def decode_integer str
         
         unless str.start_with?('i') && str.end_with?('e')
-          raise StandardError, "Ill formatted integer"
+          raise InvalidEncodingError, "Ill formatted integer"
         end
 
         str.slice(1..-2).to_i
@@ -87,7 +95,7 @@ module BEncoder
         
         if str.is_a? String
           unless str.start_with?('l') && str.end_with?('e')
-            raise StandardError, "Ill formatted array/list"
+            raise InvalidEncodingError, "Ill formatted array/list"
           end
           sio = StringIO.new(str.slice(1..-2))
         
@@ -107,7 +115,7 @@ module BEncoder
         elsif str.start_with?('d') && str.end_with?('e')
           key_val_arr = decode_array("l#{ str.slice(1..-2) }e")
         else
-          raise StandardErrorError, "Ill formatted hash"
+          raise InvalidEncodingError, "Ill formatted hash"
         end
 
         make_hash(key_val_arr)
@@ -129,7 +137,7 @@ module BEncoder
             length = io.gets(sep=':').to_i
             container << io.gets(length)
           else
-            raise StandardError, "Encountered unexpected identifier #{ peek(io) }"
+            raise InvalidEncodingError, "Encountered unexpected identifier #{ peek(io) }"
           end
         end
         io.getc
