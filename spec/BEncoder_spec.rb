@@ -69,6 +69,13 @@ describe BEncoder do
       end
     end
 
+
+    context 'invalid data' do
+      it 'throws unencodable type error : case1' do
+        expect { be.encode(10.3) }.to raise_error(UnencodableTypeError)
+      end
+    end
+
   end
 
 
@@ -121,6 +128,33 @@ describe BEncoder do
       end
     end
 
+    context 'invalid data' do
+
+      it 'throws invalid encoding error : case1' do
+        expect { be.decode('li4ed') }.to raise_error(InvalidEncodingError)
+      end
+
+      it 'throws invalid encoding error : case2' do
+        expect { be.decode('d3:abc') }.to raise_error(InvalidEncodingError)
+      end
+
+
+      it 'throws invalid encoding error : case3' do
+        expect { be.decode('i14') }.to raise_error(InvalidEncodingError)
+      end
+
+      it 'throws invalid encoding error : case4' do
+        expect { be.decode('4:spaml4:eggsee') }.to raise_error(InvalidEncodingError)
+      end
+
+      it 'throws invalid encoding error : case5' do
+        expect { be.decode('l4:spaml4:eggse') }.to raise_error(InvalidEncodingError)
+      end
+
+      it 'throws invalid encoding error : case6' do
+        expect { be.decode('d4:key14val14:key24:val2e') }.to raise_error(InvalidEncodingError)
+      end
+    end
 
   end
 
